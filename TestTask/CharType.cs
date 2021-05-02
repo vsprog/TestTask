@@ -1,18 +1,23 @@
 ﻿namespace TestTask
 {
     /// <summary>
-    /// Тип букв
+    /// Тип букв.
     /// </summary>
     public enum CharType
     {
         /// <summary>
-        /// Гласные
+        /// Гласные.
         /// </summary>
         Vowel,
 
         /// <summary>
-        /// Согласные
+        /// Согласные.
         /// </summary>
-        Consonants
+        Consonants,
+
+        /// <summary>
+        /// Неизвестный тип.
+        /// </summary>
+        Unknown
     }
 }

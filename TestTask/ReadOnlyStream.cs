@@ -5,7 +5,7 @@ namespace TestTask
 {
     public class ReadOnlyStream : IReadOnlyStream
     {        
-        private StreamReader _localStream;
+        private readonly StreamReader _localStream;
         private bool _disposed = false;
 
         /// <summary>
@@ -33,17 +33,12 @@ namespace TestTask
         /// <returns>Считанный символ.</returns>
         public char ReadNextChar()
         {
-            if (IsEof)
+            if (IsEof = _localStream.EndOfStream)
             {
                 throw new IOException("Достигнут конец файла");
             }
 
             char result = (char)_localStream.Read();
-
-            if (_localStream.Peek() < 0)
-            {
-                IsEof = true;
-            }
 
             return result;
         }
@@ -66,35 +61,15 @@ namespace TestTask
         }
 
         /// <summary>
-        /// Освобождение ресурсов
+        /// Освобождение ресурсов.
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);            
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
+            if (!_disposed)
             {
-                return;
+                _localStream.Dispose();
+                _disposed = true;
             }
-            
-            if (disposing)
-            {
-                _localStream?.Close();
-            }                
-            
-            _disposed = true;            
-        }
-
-        /// <summary>
-        /// Метод финализации.
-        /// </summary>
-        ~ReadOnlyStream()
-        {
-            Dispose(false);
         }
     }
 }
