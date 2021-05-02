@@ -5,7 +5,7 @@ namespace TestTask
     /// <summary>
     /// Статистика вхождения буквы/пары букв
     /// </summary>
-    public struct LetterStats
+    public class LetterStats
     {
         /// <summary>
         /// Буква/Пара букв для учёта статистики.

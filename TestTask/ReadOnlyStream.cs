@@ -33,12 +33,17 @@ namespace TestTask
         /// <returns>Считанный символ.</returns>
         public char ReadNextChar()
         {
-            if (IsEof = _localStream.EndOfStream)
+            if (IsEof)
             {
                 throw new IOException("Достигнут конец файла");
             }
 
             char result = (char)_localStream.Read();
+
+            if (_localStream.EndOfStream)
+            {
+                IsEof = true;
+            }
 
             return result;
         }

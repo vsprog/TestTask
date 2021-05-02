@@ -89,18 +89,18 @@ namespace TestTask
             foreach (Match match in Regex.Matches(text, Constants.DuplicatePattern, RegexOptions.IgnoreCase))
             {
                 var existingStat = result.FirstOrDefault(x => x.Letter.Equals(match.Value, StringComparison.OrdinalIgnoreCase));
-                
-                if (string.IsNullOrEmpty(existingStat.Letter))
-                {
-                    IncStatistic(existingStat);
-                }
-                else
+
+                if (existingStat == null)
                 {
                     result.Add(new LetterStats
                     {
                         Letter = match.Value,
                         Count = 1
                     });
+                }
+                else
+                {
+                    IncStatistic(existingStat);
                 }
             }
 
@@ -141,9 +141,7 @@ namespace TestTask
         /// <param name="charType">Тип букв для анализа</param>
         private static void RemoveCharStatsByType(IList<LetterStats> letters, CharType charType)
         {
-            letters
-                .ToList()
-                .RemoveAll(x => x.LetterType == charType);
+            (letters as List<LetterStats>).RemoveAll(x => x.LetterType == charType);
         }
 
         /// <summary>
