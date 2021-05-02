@@ -82,27 +82,31 @@ namespace TestTask
         /// <returns>Коллекция статистик по каждой букве, что была прочитана из стрима.</returns>
         private static IList<LetterStats> FillDoubleLetterStats(IReadOnlyStream stream)
         {
-            var result = new List<LetterStats>();
+            var statStorage = new Dictionary<string, int>();
             var buffer = GetCyrillicCharsFromStream(stream);
             var text = new string(buffer.ToArray());
 
             foreach (Match match in Regex.Matches(text, Constants.DuplicatePattern, RegexOptions.IgnoreCase))
             {
-                var existingStat = result.FirstOrDefault(x => x.Letter.Equals(match.Value, StringComparison.OrdinalIgnoreCase));
+                var key = match.Value.ToLower();
 
-                if (existingStat == null)
+                if (statStorage.ContainsKey(key))
                 {
-                    result.Add(new LetterStats
-                    {
-                        Letter = match.Value,
-                        Count = 1
-                    });
+                    statStorage[key]++;
                 }
                 else
                 {
-                    IncStatistic(existingStat);
+                    statStorage.Add(key, 1);
                 }
             }
+
+            var result = statStorage
+                .Select(x => new LetterStats
+                {
+                    Letter = x.Key,
+                    Count = x.Value
+                })
+                .ToList();
 
             return result;
         }
@@ -153,19 +157,15 @@ namespace TestTask
         /// <param name="letters">Коллекция со статистикой</param>
         private static void PrintStatistic(IEnumerable<LetterStats> letters)
         {
-            foreach(var stat in letters.OrderBy(x => x.Letter))
-            {
-                Console.WriteLine($"{stat.Letter} : {stat.Count}");
-            }            
-        }
+            var commonCounter = 0;
 
-        /// <summary>
-        /// Метод увеличивает счётчик вхождений по переданной структуре.
-        /// </summary>
-        /// <param name="letterStats"></param>
-        private static void IncStatistic(LetterStats letterStats)
-        {
-            letterStats.Count++;
+            foreach (var stat in letters.OrderBy(x => x.Letter))
+            {
+                commonCounter += stat.Count;
+                Console.WriteLine($"{stat.Letter} : {stat.Count}");
+            }
+
+            Console.WriteLine($"ИТОГО : {commonCounter}");
         }
     }
 }
