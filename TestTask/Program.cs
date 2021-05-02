@@ -31,7 +31,7 @@ namespace TestTask
                 PrintStatistic(doubleLetterStats);
             }
 
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -74,32 +74,20 @@ namespace TestTask
         /// <param name="stream">Стрим для считывания символов для последующего анализа</param>
         /// <returns>Коллекция статистик по каждой букве, что была прочитана из стрима.</returns>
         private static IList<LetterStats> FillDoubleLetterStats(IReadOnlyStream stream)
-        {
-            var statStorage = new Dictionary<string, int>();
+        {            
             var buffer = GetCyrillicCharsFromStream(stream);
             var text = new string(buffer.ToArray());
-
-            foreach (Match match in Regex.Matches(text, Constants.DuplicatePattern, RegexOptions.IgnoreCase))
-            {
-                var key = match.Value.ToLower();
-
-                if (statStorage.ContainsKey(key))
+            
+            var result = Regex.Matches(text, Constants.DuplicatePattern, RegexOptions.IgnoreCase)
+                .Cast<Match>()
+                .Select(m => m.Value.ToLower())
+                .GroupBy(s => s)
+                .Select(g => new LetterStats
                 {
-                    statStorage[key]++;
-                }
-                else
-                {
-                    statStorage.Add(key, 1);
-                }
-            }
-
-            var result = statStorage
-                .Select(x => new LetterStats
-                {
-                    Letter = x.Key,
-                    Count = x.Value
+                    Letter = g.Key,
+                    Count = g.Count()
                 })
-                .ToList();
+                .ToList();                
 
             return result;
         }
