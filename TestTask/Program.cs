@@ -18,24 +18,17 @@ namespace TestTask
         /// Второй параметр - путь до второго файла.</param>
         static void Main(string[] args)
         {
-            try
+            using (IReadOnlyStream inputStream1 = GetInputStream(args[0]))
+            using (IReadOnlyStream inputStream2 = GetInputStream(args[1]))
             {
-                using (IReadOnlyStream inputStream1 = GetInputStream(args[0]))
-                using (IReadOnlyStream inputStream2 = GetInputStream(args[1]))
-                {
-                    IList<LetterStats> singleLetterStats = FillSingleLetterStats(inputStream1);
-                    IList<LetterStats> doubleLetterStats = FillDoubleLetterStats(inputStream2);
+                IList<LetterStats> singleLetterStats = FillSingleLetterStats(inputStream1);
+                IList<LetterStats> doubleLetterStats = FillDoubleLetterStats(inputStream2);
                     
-                    RemoveCharStatsByType(singleLetterStats, CharType.Vowel);
-                    RemoveCharStatsByType(doubleLetterStats, CharType.Consonants);
+                RemoveCharStatsByType(singleLetterStats, CharType.Vowel);
+                RemoveCharStatsByType(doubleLetterStats, CharType.Consonants);
 
-                    PrintStatistic(singleLetterStats);
-                    PrintStatistic(doubleLetterStats);
-                }
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
+                PrintStatistic(singleLetterStats);
+                PrintStatistic(doubleLetterStats);
             }
 
             Console.ReadLine();
