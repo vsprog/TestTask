@@ -97,7 +97,7 @@ namespace TestTask
         /// </summary>
         /// <param name="stream">Стрим для считывания символов для последующего анализа</param>
         /// <returns>Список симовлов.</returns>
-        private static IList<char> GetCyrillicCharsFromStream(IReadOnlyStream stream)
+        private static List<char> GetCyrillicCharsFromStream(IReadOnlyStream stream)
         {
             var buffer = new List<char>();
 

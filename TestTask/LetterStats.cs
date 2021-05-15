@@ -5,7 +5,7 @@ namespace TestTask
     /// <summary>
     /// Статистика вхождения буквы/пары букв
     /// </summary>
-    public class LetterStats
+    public struct LetterStats
     {
         /// <summary>
         /// Буква/Пара букв для учёта статистики.
@@ -34,7 +34,7 @@ namespace TestTask
                     return CharType.Consonants;
                 }
 
-                return CharType.Unknown;
+                return CharType.Other;
             }
         }
     }

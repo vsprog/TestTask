@@ -16,8 +16,8 @@
         Consonants,
 
         /// <summary>
-        /// Неизвестный тип.
+        /// Другой.
         /// </summary>
-        Unknown
+        Other
     }
 }
